@@ -22,8 +22,149 @@ namespace PasswordStrenght
         }
     }
 
-    class Program
+    public class Program
     {
+        public static bool PasswordMatchesCriteria(string password, PasswordComplexity passComplex)
+        {
+            if (GetLowerCaseCount(password) < passComplex.LowerCaseMin)
+            {
+                return false;
+            }
+
+            if (GetUpperCaseCount(password) < passComplex.UpperCaseMin)
+            {
+                return false;
+            }
+
+            if (GetDigitsCount(password) < passComplex.DigitsMin)
+            {
+                return false;
+            }
+
+            if (GetSymbolCount(password) < passComplex.SymbolsMin)
+            {
+                return false;
+            }
+
+            if (!passComplex.AcceptsSimilarChars && ContainsSimilarChars(password))
+            {
+                return false;
+            }
+
+            if (!passComplex.AcceptsAmbiguousChar && ContainsAmigousChars(password))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool ContainsAmigousChars(string password)
+        {
+            foreach (char ambigousChar in "{}[]()/\'\"~,;.<> ")
+            {
+                if (password.Contains(ambigousChar))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool ContainsSimilarChars(string password)
+        {
+            foreach (char similarChar in "l1Io0O")
+            {
+                if (password.Contains(similarChar))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static int GetSymbolCount(string password)
+        {
+            if (password == null)
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
+            int lowerCaseCount = 0;
+
+            foreach (char letter in password)
+            {
+                if (!char.IsLetterOrDigit(letter))
+                {
+                    lowerCaseCount++;
+                }
+            }
+
+            return lowerCaseCount;
+        }
+
+        public static int GetDigitsCount(string password)
+        {
+            if (password == null)
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
+            int lowerCaseCount = 0;
+
+            foreach (char letter in password)
+            {
+                if (char.IsDigit(letter))
+                {
+                    lowerCaseCount++;
+                }
+            }
+
+            return lowerCaseCount;
+        }
+
+        public static int GetUpperCaseCount(string password)
+        {
+            if (password == null)
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
+            int lowerCaseCount = 0;
+
+            foreach (char letter in password)
+            {
+                if (char.IsUpper(letter))
+                {
+                    lowerCaseCount++;
+                }
+            }
+
+            return lowerCaseCount;
+        }
+
+        public static int GetLowerCaseCount(string password)
+        {
+            if (password == null)
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
+            int lowerCaseCount = 0;
+
+            foreach (char letter in password)
+            {
+                if (char.IsLower(letter))
+                    {
+                    lowerCaseCount++;
+                }
+            }
+
+            return lowerCaseCount;
+        }
+
         static void Main()
         {
             string password = Console.ReadLine();
@@ -36,39 +177,6 @@ namespace PasswordStrenght
             passComplex.AcceptsAmbiguousChar = Convert.ToBoolean(Console.ReadLine());
 
             Console.WriteLine(PasswordMatchesCriteria(password, passComplex));
-        }
-
-        private static bool PasswordMatchesCriteria(string password, PasswordComplexity passComplex)
-        {
-            if (GetLowerCaseCount() < passComplex.LowerCaseMin)
-            {
-                return false;
-            }
-            else if (GetUpperCaseCount() < passComplex.UpperCaseMin)
-            {
-                return false;
-            }
-            else if (GetDigitsCount() < passComplex.DigitsMin)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private static int GetDigitsCount()
-        {
-            throw new NotImplementedException();
-        }
-
-        private static int GetUpperCaseCount()
-        {
-            throw new NotImplementedException();
-        }
-
-        private static int GetLowerCaseCount()
-        {
-            throw new NotImplementedException();
         }
     }
 }
